@@ -1,5 +1,6 @@
 """Django settings for config project."""
 
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -7,8 +8,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-4otu0p#4f9qfg&(wttf3i&ykf-o__o07^=#5c7_(a*p(1_t%@x'
-DEBUG = True
+# SECRET_KEY is read from the environment in production.
+# For local development it falls back to an insecure default — never use this in prod.
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-local-dev-only-change-this-in-production',
+)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true'
 ALLOWED_HOSTS = ['*']
 
 
